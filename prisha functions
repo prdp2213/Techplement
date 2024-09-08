@@ -1,0 +1,69 @@
+// script.js
+
+// Function to handle navigation menu toggle
+function toggleNav() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('active');
+}
+
+// Add event listener to navigation menu toggle button
+document.querySelector('.nav-toggle').addEventListener('click', toggleNav);
+
+// Function to handle course grid filtering
+function filterCourses() {
+    const courses = document.querySelectorAll('.course-card');
+    const filterInput = document.querySelector('#filter-input');
+    const filterValue = filterInput.value.toLowerCase();
+
+    courses.forEach((course) => {
+        const courseTitle = course.querySelector('h3').textContent.toLowerCase();
+        if (courseTitle.includes(filterValue)) {
+            course.style.display = 'block';
+        } else {
+            course.style.display = 'none';
+        }
+    });
+}
+
+// Add event listener to filter input field
+document.querySelector('#filter-input').addEventListener('input', filterCourses);
+
+// Function to handle form submissions
+function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    // Send form data to server-side script for processing
+    fetch('/submit', {
+        method: 'POST',
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error));
+}
+
+// Add event listeners to forms
+document.querySelectorAll('form').forEach((form) => {
+    form.addEventListener('submit', handleSubmit);
+});
+
+// Function to handle login and signup functionality
+function handleAuth(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    // Send form data to server-side script for authentication
+    fetch('/auth', {
+        method: 'POST',
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error));
+}
+
+// Add event listeners to login and signup forms
+document.querySelectorAll('#login-form, #signup-form').forEach((form) => {
+    form.addEventListener('submit', handleAuth);
+});
